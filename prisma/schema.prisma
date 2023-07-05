@@ -24,7 +24,8 @@ model Raffle {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   URL             String
-  start_block     Int    
+  start_block     Int 
+  isEnd           Boolean
   end_block       Int?
   winner          Int?
 }
