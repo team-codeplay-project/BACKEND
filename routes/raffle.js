@@ -1,63 +1,95 @@
-const express = require("express");
-const { PrismaClient } = require("@prisma/client");
+const express = require('express');
+const { PrismaClient } = require('@prisma/client');
 
 const router = express.Router();
 
 const client = new PrismaClient();
 
 // 래플 생성
-router.post("/", async (req, res) => {
-    try {
-      const test = req.body;
+router.post('/', async (req, res) => {
+  try {
+    const { URL, start_block } = req.body;
 
-      console.log(typeof(test[1]));
-    /*5
-    id              Int       @default(autoincrement()) @id
-    createdAt       DateTime  @default(now())
-    updatedAt       DateTime  @updatedAt
-    URL             String
-    start_block     Int    
-    end_block       Int?
-    winner          Int?
-  */
-  
-      // const newRaffle = await client.raffle.create({
-      //      data: {
-      //        start_block : test[0],
-      //        URL : test[1],
-      //      },
-      //    });
-  
-       console.log('!!!');
-       res.json({ ok: true });
-    } catch (error) {
-      console.error(error);
-    }
-  });
+    const newRaffle = await client.raffle.create({
+      data: {
+        URL,
+        start_block,
+        isEnd: false,
+      },
+    });
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 // 래플 전체 조회
-router.get("/", async (req, res) => {
-    try {
-      const raffles = await client.raffle.findMany();
-      return res.json(raffles);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "An error occurred" });
-    }
+router.get('/', async (req, res) => {
+  try {
+    const raffles = await client.raffle.findMany();
+    return res.json(raffles);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
 });
 
 // 특정 래플 조회
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id ,10);
+    const id = parseInt(req.params.id, 10);
 
     const raffle = await client.raffle.findUnique({
-     where: { id, },
-     });
-     return res.json(raffle);
+      where: { id },
+    });
+    return res.json(raffle);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "An error occurred" });
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+// 특정 래플 완료
+router.get('/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    const raffle = await client.raffle.findUnique({
+      where: { id },
+    });
+    return res.json(raffle);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+// 래플 완료
+router.put('/:id/done', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { end_block } = req.body;
+
+    const existTodo = await client.raffle.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    const updatedRaffle = await client.raffle.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        end_block,
+        isEnd: true,
+      },
+    });
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.error(error);
   }
 });
 
