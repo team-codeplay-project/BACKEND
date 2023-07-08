@@ -8,11 +8,12 @@ const client = new PrismaClient();
 // 래플 생성
 router.post('/', async (req, res) => {
   try {
-    const { URL, start_block } = req.body;
+    const { name , url , start_block } = req.body;
 
     const newRaffle = await client.raffle.create({
       data: {
-        URL,
+        name , 
+        url,
         start_block,
         isEnd: false,
       },
