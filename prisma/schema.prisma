@@ -23,7 +23,20 @@ model Raffle {
   id              Int       @default(autoincrement()) @id
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  URL             String
+  name            String
+  url             String
+  start_block     Int 
+  isEnd           Boolean
+  end_block       Int?
+  winner          String?
+}
+
+model Auction{
+  id              Int       @default(autoincrement()) @id
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  name            String
+  url             String
   start_block     Int 
   isEnd           Boolean
   end_block       Int?
