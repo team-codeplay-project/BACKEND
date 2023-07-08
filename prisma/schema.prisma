@@ -27,5 +27,5 @@ model Raffle {
   start_block     Int 
   isEnd           Boolean
   end_block       Int?
-  winner          Int?
+  winner          String?
 }

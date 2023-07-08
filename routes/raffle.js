@@ -50,44 +50,35 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// 특정 래플 완료
-router.get('/:id', async (req, res) => {
-  try {
-    const id = parseInt(req.params.id, 10);
-
-    const raffle = await client.raffle.findUnique({
-      where: { id },
-    });
-    return res.json(raffle);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occurred' });
-  }
-});
-
 // 래플 완료
 router.put('/:id/done', async (req, res) => {
   try {
     const { id } = req.params;
-    const { end_block } = req.body;
+    const { end_block , winner } = req.body;
 
-    const existTodo = await client.raffle.findUnique({
+    const Raffle = await client.raffle.findUnique({
       where: {
         id: parseInt(id),
       },
     });
 
-    const updatedRaffle = await client.raffle.update({
+    if (!Raffle) {
+      return res.status(400).json({ ok: false, error: "Not exist Raffle" });
+    }
+
+    await client.raffle.update({
       where: {
         id: parseInt(id),
       },
       data: {
         end_block,
         isEnd: true,
+        winner,
       },
-    });
+    }) ;
 
-    res.json({ ok: true });
+    res.json( { ok: true } ) ;
+
   } catch (error) {
     console.error(error);
   }
