@@ -2,15 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const userRouter = require("./routes/user");
 const raffleRouter = require("./routes/raffle");
+const auctionRouter = require("./routes/auction");
 
 const app = express();
 
-const port = 3010;
+const port = process.env.PORT || 8080 ;
 
 app.use(cors());
 app.use(express.json());
 app.use("/user", userRouter);
 app.use("/raffle", raffleRouter);
+app.use("/auction", auctionRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, Express!");
