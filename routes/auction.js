@@ -8,11 +8,11 @@ const client = new PrismaClient();
 // 래플 생성
 router.post('/', async (req, res) => {
   try {
-    const { name , url , start_block } = req.body;
+    const { name, url, start_block } = req.body;
 
     const newauction = await client.auction.create({
       data: {
-        name , 
+        name,
         url,
         start_block,
         isEnd: false,
@@ -36,7 +36,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 특정 래플 조회
+// 특정 옥션 조회
 router.get('/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -51,11 +51,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// 래플 완료
+// 옥션 완료
 router.put('/:id/done', async (req, res) => {
   try {
     const { id } = req.params;
-    const { end_block , winner } = req.body;
+    const { end_block, winner } = req.body;
 
     const auction = await client.auction.findUnique({
       where: {
@@ -64,7 +64,7 @@ router.put('/:id/done', async (req, res) => {
     });
 
     if (!auction) {
-      return res.status(400).json({ ok: false, error: "Not exist auction" });
+      return res.status(400).json({ ok: false, error: 'Not exist auction' });
     }
 
     await client.auction.update({
@@ -76,10 +76,9 @@ router.put('/:id/done', async (req, res) => {
         isEnd: true,
         winner,
       },
-    }) ;
+    });
 
-    res.json( { ok: true } ) ;
-
+    res.json({ ok: true });
   } catch (error) {
     console.error(error);
   }
