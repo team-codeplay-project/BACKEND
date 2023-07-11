@@ -5,7 +5,7 @@ const router = express.Router();
 
 const client = new PrismaClient();
 
-// 래플 생성
+// 옥션 생성
 router.post('/', async (req, res) => {
   try {
     const { name, url, start_block } = req.body;
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 래플 전체 조회
+// 옥션 전체 조회
 router.get('/', async (req, res) => {
   try {
     const auctions = await client.auction.findMany();
