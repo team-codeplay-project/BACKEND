@@ -15,8 +15,9 @@ model User {
   id              Int       @default(autoincrement()) @id
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  phone_number          Int    @unique
+  phone_number       Int    @unique
   address         String    @unique
+  name            String
 }
 
 model Raffle {

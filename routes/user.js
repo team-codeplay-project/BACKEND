@@ -6,48 +6,40 @@ const router = express.Router();
 const client = new PrismaClient();
 
 // 유저 생성
-router.post("/", async (req, res) => {
-    try {
-      const { test } = req.body;
-      console.log(test);
-      //const user = await client.user.findUnique()
-  
-    //   // 너무 정확한 에러 표시는 위험
-    //   if (!todo) {
-    //     return res.status(400).json({ ok: false, error: "Not exist todo." });
-    //   }
-    //   if (!userId) {
-    //     return res.status(400).json({ ok: false, error: "Not exist userId" });
-    //   }
-  
-    //   const user = await client.user.findUnique({
-    //     where: {
-    //       id: parseInt(userId),
-    //     },
-    //   });
-  
-    //   if (!user) {
-    //     return res.status(400).json({ ok: false, error: "Not exist user." });
-    //   }
-  
-    //   const newTodo = await client.todo.create({
-    //     data: {
-    //       todo,
-    //       isDone: false,
-    //       userId: user.id,
-    //     },
-    //   });
-  
-    //   res.json({ ok: true, todo: newTodo });
-    } catch (error) {
-      console.error(error);
-    }
-  });
+router.post('/', async (req, res) => {
+  try {
+
+    // phone_number       Int    @unique
+    // address         String    @unique
+    // name            String
+    let { phone_number , address , name } = req.body;
+
+    phone_number = Number( phone_number ) ;
+
+    await client.user.create({
+      data: {
+        phone_number ,
+        address ,
+        name ,
+      },
+    });
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 // 유저 조회
 router.get("/:account", async (req, res) => {
   try {
-    const { account } = req.params;
+    const { account } = req.params ;
+
+    const user = await client.user.findUnique({
+      where:{
+        address : account ,
+      }
+    });
 
     if (!user) {
       return res.status(400).json({
@@ -60,6 +52,32 @@ router.get("/:account", async (req, res) => {
       ok: true,
       user,
     });
+
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// 유저 정보 변경
+router.put('/:account', async (req, res) => {
+  try {
+
+    // phone_number       Int    @unique
+    // address         String    @unique
+    // name            String
+    const { phone_number , name } = req.body;
+
+    await client.user.update({
+      where:{
+        address : account ,
+      },
+      data: {
+        phone_number ,
+        name,
+        },
+    });
+
+    res.json({ ok: true });
   } catch (error) {
     console.error(error);
   }
