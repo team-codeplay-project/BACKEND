@@ -47,7 +47,8 @@ model Nft{
   id              Int       @default(autoincrement()) @id
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  tokenId         Int       @unique
+  day             Int
+  type            Int
   owner           String
   isUsed          Boolean
 }

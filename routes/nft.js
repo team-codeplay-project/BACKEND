@@ -8,11 +8,12 @@ const client = new PrismaClient();
 // nft 생성
 router.post('/', async (req, res) => {
     try {
-      const { tokenId , owner } = req.body;
+      const { day , type , owner } = req.body;
   
-      const newauction = await client.nft.create({
+      await client.nft.create({
         data: {
-          tokenId ,
+          day ,
+          type ,
           owner , 
           isUsed : false ,
         },
