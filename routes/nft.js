@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
     }
   });
   
-  // 특정 래플 조회
+  // 특정 nft 조회
 router.get('/:id', async (req, res) => {
     try {
       const tokenId = parseInt(req.params.tokenId, 10);
@@ -87,6 +87,36 @@ router.put('/done', async (req, res) => {
       console.error(error);
     }
   });
+
+  // 환불 = 삭제
+
+  router.delete('/', async (req, res) => {
+    try {
+      const { day , type } = req.body;
+      
+      const nft = await client.nft.findMany({
+        where: {
+          day : parseInt(day, 10),
+          type : parseInt(type , 10),
+        },
+      });
+  
+      if (!nft) {
+        return res.status(400).json({ ok: false, error: "Not exist nft" });
+      }
+  
+      await client.nft.deleteMany({
+        where: {
+          day: parseInt(day , 10),
+          type: parseInt(type , 10),
+        },
+      }) ;
+  
+      res.json( { ok: true } ) ;
+  
+    } catch (error) {
+      console.error(error);
+    }
+  });
   
   module.exports = router;
-  
