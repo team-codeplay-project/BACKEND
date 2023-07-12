@@ -38,13 +38,13 @@ router.get('/', async (req, res) => {
   });
   
   // 특정 nft 조회
-router.get('/:id', async (req, res) => {
+router.get('/:account', async (req, res) => {
     try {
-      const id = Number(req.params.id);
+      const account = req.params.account;
       
       const nft = await client.nft.findMany({
         where: {
-          id,
+          owner : account ,
         },
       });
       return res.json(nft);
