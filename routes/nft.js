@@ -40,12 +40,11 @@ router.get('/', async (req, res) => {
   // 특정 nft 조회
 router.get('/:id', async (req, res) => {
     try {
-      const tokenId = parseInt(req.params.tokenId, 10);
-  
+      const id = Number(req.params.id);
+      
       const nft = await client.nft.findMany({
         where: {
-          day: parseInt(day, 10),
-          type: parseInt(type , 10),
+          id,
         },
       });
       return res.json(nft);
