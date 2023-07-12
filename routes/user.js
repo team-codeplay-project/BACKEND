@@ -1,5 +1,5 @@
-const express = require("express");
-const { PrismaClient } = require("@prisma/client");
+const express = require('express');
+const { PrismaClient } = require('@prisma/client');
 
 const router = express.Router();
 
@@ -8,31 +8,29 @@ const client = new PrismaClient();
 // 유저 생성
 router.post('/', async (req, res) => {
   try {
-
     // phone_number       Int    @unique
     // address         String    @unique
     // name            String
-    let { phone_number , address , name } = req.body;
-    phone_number = Number( phone_number ) ;
+    let { phone_number, address, name } = req.body;
+    phone_number = Number(phone_number);
 
-    const user = client.user.findUnique( {
-      where:{
-        phone_number ,
-      }
-    })
+    // console.log(phone_number, address, name);
 
-    if (user) {
-      return res.status(400).json({
-        ok: false,
-        error: "exist phone",
-      });
+    const response = await client.user.findUnique({
+      where: {
+        address,
+      },
+    });
+
+    if (response) {
+      res.json({ ok: false });
     }
 
     await client.user.create({
       data: {
-        phone_number ,
-        address ,
-        name ,
+        phone_number,
+        address,
+        name,
       },
     });
 
@@ -43,29 +41,28 @@ router.post('/', async (req, res) => {
 });
 
 // 유저 조회
-router.get("/:account", async (req, res) => {
+router.get('/:account', async (req, res) => {
   try {
-    const { account } = req.params ;
-    
+    const { account } = req.params;
+
     const user = await client.user.findUnique({
-      where:{
-        address : account ,
+      where: {
+        address: account,
       },
-      select:{
-        name : true ,
-        address : true ,
-      }
+      select: {
+        name: true,
+        address: true,
+      },
     });
 
     if (!user) {
-      return res.json( { ok:false }) ;
+      return res.json({ ok: false });
     }
 
     res.json({
       ok: true,
       user,
     });
-
   } catch (error) {
     console.error(error);
   }
@@ -74,20 +71,19 @@ router.get("/:account", async (req, res) => {
 // 유저 정보 변경
 router.put('/:account', async (req, res) => {
   try {
-
     // phone_number       Int    @unique
     // address         String    @unique
     // name            String
-    const { phone_number , name } = req.body;
+    const { phone_number, name } = req.body;
 
-    await client.user.update({
-      where:{
-        address : account ,
+    await client.update({
+      where: {
+        address: account,
       },
       data: {
-        phone_number ,
+        phone_number,
         name,
-        },
+      },
     });
 
     res.json({ ok: true });
