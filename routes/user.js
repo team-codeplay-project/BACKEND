@@ -13,8 +13,20 @@ router.post('/', async (req, res) => {
     // address         String    @unique
     // name            String
     let { phone_number , address , name } = req.body;
-
     phone_number = Number( phone_number ) ;
+
+    const user = client.user.findUnique( {
+      where:{
+        phone_number ,
+      }
+    })
+
+    if (user) {
+      return res.status(400).json({
+        ok: false,
+        error: "exist phone",
+      });
+    }
 
     await client.user.create({
       data: {
