@@ -50,14 +50,15 @@ router.get("/:account", async (req, res) => {
     const user = await client.user.findUnique({
       where:{
         address : account ,
+      },
+      select:{
+        name : true ,
+        address : true ,
       }
     });
 
     if (!user) {
-      return res.status(400).json({
-        ok: false,
-        error: "Not exist user.",
-      });
+      res.json( { ok:false }) ;
     }
 
     res.json({

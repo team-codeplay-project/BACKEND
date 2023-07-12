@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
     } catch (error) {
       console.error(error);
     }
-  });
+});
 
   
 // nft 조회
@@ -93,7 +93,7 @@ router.put('/done', async (req, res) => {
   router.delete('/', async (req, res) => {
     try {
       const { day , type } = req.body;
-      
+
       const nft = await client.nft.findMany({
         where: {
           day : parseInt(day, 10),
