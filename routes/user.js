@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
 router.get("/:account", async (req, res) => {
   try {
     const { account } = req.params ;
-
+    
     const user = await client.user.findUnique({
       where:{
         address : account ,
@@ -58,7 +58,7 @@ router.get("/:account", async (req, res) => {
     });
 
     if (!user) {
-      res.json( { ok:false }) ;
+      return res.json( { ok:false }) ;
     }
 
     res.json({
