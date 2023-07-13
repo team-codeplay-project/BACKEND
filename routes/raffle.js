@@ -25,10 +25,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 래플 전체 조회
+// 래플 조회 ( 종료 여부 )
 router.get('/', async (req, res) => {
   try {
-    const raffles = await client.raffle.findMany();
+    const { isEnd } = req.body;
+    const raffles = await client.raffle.findMany(
+      {
+        where:{
+          isEnd ,
+        }
+      }
+    );
     return res.json(raffles);
   } catch (error) {
     console.error(error);

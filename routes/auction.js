@@ -25,10 +25,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 옥션 전체 조회
+// 옥션 조회 ( 종료 여부 )
 router.get('/', async (req, res) => {
   try {
-    const auctions = await client.auction.findMany();
+    const { isEnd } = req.body;
+    const auctions = await client.auction.findMany(
+      {
+        where:{
+          isEnd ,
+        }
+      }
+    );
     return res.json(auctions);
   } catch (error) {
     console.error(error);
